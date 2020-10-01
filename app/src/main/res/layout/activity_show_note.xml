@@ -4,15 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#9AD1F6"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".ShowNote"
-    android:background="#9AD1F6">
+    tools:context=".ShowNote">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update/Delete"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#A90C0105"
+        android:background="#5899CD"/>
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:layout_marginTop="10dp"
         android:text="Title"
         android:textSize="25sp"
