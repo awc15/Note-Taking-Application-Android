@@ -10,6 +10,7 @@
     tools:context=".ShowNote">
 
     <Button
+        android:id="@+id/updateDeleteBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update/Delete"
@@ -20,12 +21,14 @@
 
     <TextView
         android:id="@+id/title"
+        android:fontFamily="monospace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:layout_margin="20dp"
         android:layout_marginTop="10dp"
         android:text="Title"
-        android:textSize="25sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
 
     <TextView

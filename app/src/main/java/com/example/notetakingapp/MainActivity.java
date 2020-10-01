@@ -3,6 +3,7 @@ package com.example.notetakingapp;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,40 +16,57 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNoteListener {
 
     private SQLiteDatabase mDatabase;
-    private FloatingActionButton fab;
+    private FloatingActionButton fab, deleteAllFab;
     private NotesAdapter adapter;
-
-
+    private RecyclerView recyclerView;
+    private NotesDBHelper dbHelper;
+    private List<NotesContract> allNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fab = findViewById(R.id.floatingButton);
-        final NotesDBHelper dbHelper = new NotesDBHelper(this);
+        deleteAllFab = findViewById(R.id.deleteAll);
+        dbHelper = new NotesDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
-        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
-        adapter = new NotesAdapter(this, getAllItems());
-        if(adapter!=null){
-            adapter.swapCursor(getAllItems());
-        }
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new NotesAdapter.OnItemClickListener() {
+        recyclerView = findViewById(R.id.recyclerView);
+        fillRecyclerView();
+        deleteAllFab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClicked(int position) {
-               // Toast.makeText(getApplicationContext(),"Item : "+position,Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(getApplicationContext(),ShowNote.class);
-                intent.putExtra("ID",position+1);
-                startActivity(intent);
+            public void onClick(View view) {
+
+                if (adapter!=null){
+                    dbHelper.deleteAllNotes();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+                else{
+                    Snackbar.make(view, "There's Nothing to DELETE", BaseTransientBottomBar.LENGTH_SHORT).show();
+                }
+
             }
         });
+
     }
 
+    private void fillRecyclerView() {
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+
+        allNotes = dbHelper.listNotes();
+        if (allNotes.size() > 0) {
+            adapter = new NotesAdapter(this, allNotes, this);
+            recyclerView.setAdapter(adapter);
+
+        }
+    }
 
     public void AddNote(View view) {
         startActivity(new Intent(getApplicationContext(), AddNote.class));
@@ -56,33 +74,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-
-        new AlertDialog.Builder(this)
-                .setTitle("Exit Application")
-                .setMessage("Are you sure you want to exit?")
-                .setNegativeButton(android.R.string.no, null)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        finishAffinity();
-                        MainActivity.super.onBackPressed();
-                    }
-                }).create().show();
-    }
-
-    private Cursor getAllItems() {
-        Cursor cursor = mDatabase.query(
-                NotesContract.Notes.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                NotesContract.Notes._ID
-        );
-
-
-        return cursor;
+    public void onNoteClick(int position) {
+        position = (int) allNotes.get(position).getID();
+        Intent intent = new Intent(getApplicationContext(), ShowNote.class);
+        intent.putExtra("ID", position);
+        startActivity(intent);
     }
 }

@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ShowNote"></activity>
+        <activity android:name=".ShowNote" />
         <activity
             android:name=".AddNote"
             android:screenOrientation="portrait"

@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -109,21 +110,20 @@ public class AddNote extends AppCompatActivity implements DatePickerDialog.OnDat
                     String noteDescription = detail.getText().toString();
                     String noteDate = date.getText().toString();
                     String noteTime = time.getText().toString();
-                    ContentValues cv = new ContentValues();
-                    cv.put(NotesContract.Notes.NOTES_TITLE, noteTitle);
-                    cv.put(NotesContract.Notes.NOTES_DESCRIPTION, noteDescription);
-                    cv.put(NotesContract.Notes.NOTES_DATE, noteDate);
-                    cv.put(NotesContract.Notes.NOTES_TIME, noteTime);
-                    dbHelper = new NotesDBHelper(getApplicationContext());
-                    mDatabase = dbHelper.getWritableDatabase();
-                    mDatabase.insert(NotesContract.Notes.TABLE_NAME, null, cv);
+                    NotesContract note=new NotesContract(noteTitle,noteDescription,noteDate,noteTime);
+                    if(note ==null){
+                        Toast.makeText(getApplicationContext(),"Null",Toast.LENGTH_SHORT).show();
+                    }else{
+                        dbHelper=new NotesDBHelper(getApplicationContext());
+                        dbHelper.addNote(note);
+                        title.getText().clear();
+                        detail.getText().clear();
+                        date.setText("Enter Date using the button below");
+                        time.setText("Enter Time using the button below");
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
 
-                    title.getText().clear();
-                    detail.getText().clear();
-                    date.setText("Enter Date using the button below");
-                    time.setText("Enter Time using the button below");
-                    //finish();
-                    //startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 } else {
 
                     Snackbar.make(view, "Kindly fill all fields", BaseTransientBottomBar.LENGTH_SHORT).show();
@@ -144,20 +144,6 @@ public class AddNote extends AppCompatActivity implements DatePickerDialog.OnDat
         date.setText(CurrentDate);
     }
 
-    private Cursor getAllItems() {
-        Cursor cursor = mDatabase.query(
-                NotesContract.Notes.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                NotesContract.Notes._ID
-        );
-
-
-        return cursor;
-    }
 
     @Override
     public void onBackPressed() {
