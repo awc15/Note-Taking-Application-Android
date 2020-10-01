@@ -77,7 +77,7 @@ public class AddNote extends AppCompatActivity implements DatePickerDialog.OnDat
                                 time.setText(hourOfDay + ":" + mMinute);
                                 timeSet = true;
                             }
-                        }, 12, 0, false
+                        }, 12, 0, true
                 );
                 timePickerDialog.updateTime(mHour, minute);
                 timePickerDialog.show();

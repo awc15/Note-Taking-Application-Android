@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClicked(int position) {
                // Toast.makeText(getApplicationContext(),"Item : "+position,Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(getApplicationContext(),ShowNote.class);
-                intent.putExtra("ID",position);
+                intent.putExtra("ID",position+1);
                 startActivity(intent);
             }
         });
