@@ -106,11 +106,12 @@ public class NotesDBHelper extends SQLiteOpenHelper {
     public void updateNote(NotesContract note) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        int id=note.getID();
         values.put(NOTES_TITLE, note.getTitle());
         values.put(NOTES_DESCRIPTION, note.getDescription());
         values.put(NOTES_DATE, note.getDate());
         values.put(NOTES_TIME, note.getTime());
-        db.update(TABLE_NAME, values, NOTES_ID + "    = ?", new String[]{String.valueOf(note.getID())});
+        db.update(TABLE_NAME, values, NOTES_ID + " = " + note.getID(),null);
     }
 }
 

@@ -32,7 +32,7 @@ public class NotesContract {
 
 
 
-    public long getID() {
+    public int getID() {
         return ID;
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class ShowNote extends AppCompatActivity {
     private SQLiteDatabase mDatabase;
     private NotesDBHelper dbHelper;
     private Button updDelButton;
-    private long ID;
+    private int ID,backupID=0;
     private NotesContract note = null;
 
     @Override
@@ -31,6 +32,7 @@ public class ShowNote extends AppCompatActivity {
         setContentView(R.layout.activity_show_note);
         dbHelper = new NotesDBHelper(this);
         ID = getIntent().getIntExtra("ID", 0);
+        backupID=ID;
         Toast.makeText(getApplicationContext(), "ID : " + ID, Toast.LENGTH_SHORT).show();
         getSupportActionBar().hide();
         fvd();
@@ -76,7 +78,10 @@ public class ShowNote extends AppCompatActivity {
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
+                        Intent intent = new Intent(getApplicationContext(), UpdateNote.class);
+                        intent.putExtra("backupID",backupID);
+                        Log.e("TAG", "onClick: "+ID );
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
