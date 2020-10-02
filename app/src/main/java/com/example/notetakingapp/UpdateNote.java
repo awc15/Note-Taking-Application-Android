@@ -22,6 +22,7 @@ import java.util.Calendar;
 public class UpdateNote extends AppCompatActivity {
 
     private int ID = -1;
+    private int noteId ;
     private NotesContract note = null;
     private NotesDBHelper dbHelper;
     private EditText title, detail;
@@ -87,6 +88,7 @@ public class UpdateNote extends AppCompatActivity {
                     String noteDate = date.getText().toString();
                     String noteTime = time.getText().toString();
                     NotesContract note=new NotesContract(noteTitle,noteDescription,noteDate,noteTime);
+                    note.setID(noteId);
                     if(note ==null){
                         Toast.makeText(getApplicationContext(),"Null",Toast.LENGTH_SHORT).show();
                     }else{
@@ -131,6 +133,7 @@ public class UpdateNote extends AppCompatActivity {
     private void fillFields(int id) {
         dbHelper = new NotesDBHelper(this);
         note = dbHelper.findNote(ID);
+        noteId=note.getID();
         title.setText(note.getTitle());
         detail.setText(note.getDescription());
         date.setText(note.getDate());

@@ -40,25 +40,10 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNo
         mDatabase = dbHelper.getWritableDatabase();
         recyclerView = findViewById(R.id.recyclerView);
         fillRecyclerView();
-        deleteAllFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (adapter!=null){
-                    dbHelper.deleteAllNotes();
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                }
-                else{
-                    Snackbar.make(view, "There's Nothing to DELETE", BaseTransientBottomBar.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
     }
 
     private void fillRecyclerView() {
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 1));
 
         allNotes = dbHelper.listNotes();
         if (allNotes.size() > 0) {
@@ -79,5 +64,16 @@ public class MainActivity extends AppCompatActivity implements NotesAdapter.OnNo
         Intent intent = new Intent(getApplicationContext(), ShowNote.class);
         intent.putExtra("ID", position);
         startActivity(intent);
+    }
+
+    public void deleteAllNotes(View view) {
+
+        if (adapter!=null){
+            dbHelper.deleteAllNotes();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+        else{
+            Snackbar.make(view, "There's Nothing to DELETE", BaseTransientBottomBar.LENGTH_SHORT).show();
+        }
     }
 }

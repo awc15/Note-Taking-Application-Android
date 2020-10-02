@@ -65,14 +65,15 @@ public class NotesDBHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addNote(NotesContract note) {
+    public int addNote(NotesContract note) {
         ContentValues values = new ContentValues();
         values.put(NOTES_TITLE, note.getTitle());
         values.put(NOTES_DESCRIPTION, note.getDescription());
         values.put(NOTES_DATE, note.getDate());
         values.put(NOTES_TIME, note.getTime());
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_NAME, null, values);
+        int id = (int) db.insert(TABLE_NAME, null, values);
+        return id;
     }
 
     public NotesContract findNote(int id) {
@@ -106,12 +107,13 @@ public class NotesDBHelper extends SQLiteOpenHelper {
     public void updateNote(NotesContract note) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        int id=note.getID();
+//        int id=note.getID();
+//        int check =id;
         values.put(NOTES_TITLE, note.getTitle());
         values.put(NOTES_DESCRIPTION, note.getDescription());
         values.put(NOTES_DATE, note.getDate());
         values.put(NOTES_TIME, note.getTime());
-        db.update(TABLE_NAME, values, NOTES_ID + " = " + note.getID(),null);
+        db.update(TABLE_NAME, values, NOTES_ID + "    = ?", new String[]{String.valueOf(note.getID())});
     }
 }
 
